@@ -1,6 +1,8 @@
 # gcp_cloudrun_hw2
 Hello World 2 on Cloud Run
+Read and Write to a GCS bucket. 
 
+https://console.cloud.google.com/run?project=pyhellowworld2
 
 in the folder C:\Users\dfbro\Desktop\code\py\gcp\helloworld2
 run 
