@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% block content %}
+  <title>{% block page %}{{title}}{% endblock %}</title>
+    <script>
+
+    function myFunction(name) {
+      yo = "{{ url_for('about') }}";
+      //alert(name + yo);
+      //document.getElementById("demo").innerHTML = window.location.href + '?page=2&filter=' + name;
+      //window.location.href =  window.location.hostname + 'about?page=2&filter=' + name;
+      document.getElementById("demo").innerHTML = window.location.hostname +  ":"+ window.location.port + '/about?page=2&filter=' + name;
+    }
+    
+function GetKeyFromClick( column_value, column_idx , column_name) {
+    //column_name = column_name -1 ;
+    base_url='https://8080-cs-957240302839-default.cs-us-east1-vpcf.cloudshell.dev/'
+    document.getElementById("myColNumber").value  = column_name ;
+    document.getElementById("demo").innerHTML = column_name + ':' + column_value  + ':' + column_idx;
+    document.getElementById("myInput").value  = column_value ;
+
+    if( column_name=='File Viewer')
+    {
+        // https://5000-cs-957240302839-default.cs-us-east1-vpcf.cloudshell.dev/file_viewer?folder_file_name=example-bucket-1-dfb|options.csv
+        // https://8080-cs-957240302839-default.cs-us-east1-vpcf.cloudshell.dev/df?file_name_csv=options.csv
+        // https://5000-cs-957240302839-default.cs-us-east1-vpcf.cloudshell.dev/file_viewer?folder_file_name=D:/data/prices/tesla/TSLA_cash-flow_financials.csv
+        //df?file_name_csv=options.csv
+        window.location.assign( base_url + 'df?file_name_csv='+ column_value);
+    }
+}
+function GetKeyFromClickClear( ) {
+    document.getElementById("myInput").value  = '' ;
+    document.getElementById("myColNumber").value  = 0 ;
+//    TableSearchFunctionB();
+} 
+
+
+function TableSearchFunctionB() 
+{
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+var Column_Number =  parseInt( document.getElementById("myColNumber").value );
+
+//alert(document.getElementById("myColNumber").value);
+//alert(document.getElementById("myInput").value);
+
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+filter = filter.toString();
+filter = filter.toUpperCase();
+table = document.getElementById("myTableEventsOther");
+
+tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[Column_Number];
+    if (td) {
+      txtValue = td.textContent ||  td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+}
+    </script>
+  
+  
+<script type="text/javascript" src="{{ url_for('static', filename='myjs.js') }}"></script>
+         
+    <div class="row">
+                <h5>{{ my_list|join('; ') }}  {{ my_listc|join('; ') }} </h5>
+    <form>
+    <input type="text" id="myInput" hidden>
+    <input type="text" id="myColNumber" hidden>
+    </form>
+    
+ 
+    </div>
+
+
+<h2 color="black" class="text-center text-dark"> {{title}}</h2>
+
+<p id="demo"  onclick="GetKeyFromClickClear()">Clear.</p>
+
+
+
+  <div class="table-responsive">
+        <table class="table table-hover" id="myTableEventsOther">
+          <thead class="thead-dark">
+              <tr>
+                  {% for col in colnames %}
+                  <th>{{ col }}</th>
+                  {% endfor %}
+              </tr>
+          </thead>
+          <tbody>
+              {% for record in records %}
+              <tr class="border">
+                  {% for col in colnames %}
+ <td class="nopadding" onclick="GetKeyFromClick('{{ record[col] }} ','{{loop.index}}','{{col}}')" > {{ record[col] }}      </td>
+                  {% endfor %}
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+</div>
+
+  {% endblock %}
+ 
+
